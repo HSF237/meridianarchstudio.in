@@ -2,174 +2,221 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Meridian Arch Studio</title>
   <style>
     * {
-      box-sizing: border-box;
+      margin: 0; padding: 0; box-sizing: border-box;
     }
     body {
-      margin: 0;
       font-family: 'Segoe UI', sans-serif;
-      background-color: #ffffff;
-      color: #333;
-      overflow: hidden;
+      color: #222;
+      background: #fafafa;
+      scroll-behavior: smooth;
     }
     header {
-      height: 20vh;
-      background: #eaeaea;
-      padding: 20px;
-      text-align: center;
-      position: relative;
+      background: #1f1f1f;
+      color: #fff;
+      padding: 15px 20px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 999;
     }
     header h1 {
-      margin: 0;
-      font-size: 1.5em;
+      font-size: 20px;
     }
     sup.reg {
       font-size: 0.5em;
       vertical-align: top;
       margin-left: 2px;
     }
-    header p {
-      margin: 5px 0 0;
-      color: #666;
-      font-size: 0.9em;
-    }
-    .about-button {
-      position: absolute;
-      top: 15px;
-      right: 20px;
-      background: #ffeb3b;
-      padding: 6px 10px;
-      border-radius: 5px;
+    nav a {
+      color: #fff;
       text-decoration: none;
-      color: #000;
-      font-weight: 600;
-      font-size: 0.85em;
+      margin-left: 15px;
+      font-size: 15px;
+    }
+    nav a:hover {
+      color: #ffcc00;
     }
 
-    .section {
-      height: 25vh;
-      padding: 10px;
-      text-align: center;
+    .hero {
+      height: 250px;
+      background: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c') center/cover no-repeat;
       display: flex;
-      flex-direction: column;
       justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+    }
+    .hero h2 {
+      color: #fff;
+      font-size: 36px;
+      z-index: 1;
+      text-align: center;
+      padding: 0 20px;
     }
 
-    .slider-container {
-      position: relative;
-      width: 90%;
-      max-width: 600px;
-      margin: 10px auto 0;
-      overflow: hidden;
+    .projects {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .project-box {
+      background: #fff;
       border-radius: 10px;
-      height: 100px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      position: relative;
+    }
+
+    .project-box h3 {
+      padding: 10px;
+      background: #1f1f1f;
+      color: #fff;
+      font-size: 16px;
     }
 
     .slider {
       display: flex;
-      transition: transform 0.5s ease;
-      height: 100px;
+      transition: transform 0.5s ease-in-out;
     }
 
     .slider img {
       width: 100%;
-      flex-shrink: 0;
+      height: 200px;
       object-fit: cover;
-    }
-
-    .slider-button {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background: rgba(255, 255, 255, 0.8);
-      border: none;
-      padding: 5px;
-      font-size: 16px;
+      flex-shrink: 0;
       cursor: pointer;
     }
 
-    .slider-button.prev {
-      left: 10px;
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 9999;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.9);
+      justify-content: center;
+      align-items: center;
     }
-
-    .slider-button.next {
-      right: 10px;
+    .modal img {
+      max-width: 90%;
+      max-height: 80vh;
+    }
+    .close-btn {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      font-size: 28px;
+      color: white;
+      cursor: pointer;
     }
 
     footer {
-      height: 10vh;
+      background: #1f1f1f;
+      color: white;
       text-align: center;
-      padding: 10px;
-      font-size: 12px;
-      background: #f1f1f1;
-      line-height: 1.5em;
+      padding: 20px;
+    }
+
+    @media(max-width: 768px) {
+      .hero h2 { font-size: 24px; }
+      header h1 { font-size: 18px; }
     }
   </style>
 </head>
 <body>
 
-  <header>
-    <h1>Meridian<sup class="reg">®</sup> Arch Studio</h1>
-    <p>since 2006</p>
-    <a href="https://hsf237.github.io/Meridianarchstudio/index.html" class="about-button" target="_blank">About Us</a>
-  </header>
+<header>
+  <h1>Meridian<sup class="reg">®️</sup> Arch Studio</h1>
+  <nav>
+    <a href="#projects">Projects</a>
+    <a href="https://hsf237.github.io/Meridianarchstudio/index.html">About Us</a>
+  </nav>
+</header>
 
-  <section class="section">
-    <h2>Ongoing Projects</h2>
-    <div class="slider-container">
-      <div class="slider" id="slider1">
-        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" alt="Ongoing 1" />
-        <img src="https://via.placeholder.com/700x400/999999/ffffff?text=Ongoing+2" alt="Ongoing 2" />
-      </div>
+<div class="hero">
+  <h2>Designing Dreams. Building the Future.</h2>
+</div>
+
+<section id="projects" class="projects">
+  <div class="project-box">
+    <h3>Ongoing Projects</h3>
+    <div class="slider" id="slider1">
+      <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" onclick="openModal(this.src)">
+      <img src="https://via.placeholder.com/400x200/999/fff?text=Ongoing+2" onclick="openModal(this.src)">
+      <img src="https://via.placeholder.com/400x200/ccc/000?text=Ongoing+3" onclick="openModal(this.src)">
     </div>
-  </section>
-
-  <section class="section">
-    <h2>Villa Projects</h2>
-    <div class="slider-container">
-      <div class="slider" id="slider2">
-        <img src="https://via.placeholder.com/700x400/aabbcc/000000?text=Villa+1" alt="Villa 1" />
-        <img src="https://via.placeholder.com/700x400/778899/ffffff?text=Villa+2" alt="Villa 2" />
-      </div>
+  </div>
+  <div class="project-box">
+    <h3>Villa Projects</h3>
+    <div class="slider" id="slider2">
+      <img src="https://via.placeholder.com/400x200/ff7f50/fff?text=Villa+1" onclick="openModal(this.src)">
+      <img src="https://via.placeholder.com/400x200/6495ed/fff?text=Villa+2" onclick="openModal(this.src)">
+      <img src="https://via.placeholder.com/400x200/3cb371/fff?text=Villa+3" onclick="openModal(this.src)">
     </div>
-  </section>
-
-  <section class="section">
-    <h2>Plot for Sale</h2>
-    <div class="slider-container">
-      <div class="slider" id="slider3">
-        <img src="https://via.placeholder.com/700x400/ccaa99/000000?text=Plot+1" alt="Plot 1" />
-        <img src="https://via.placeholder.com/700x400/aa8877/ffffff?text=Plot+2" alt="Plot 2" />
-      </div>
+  </div>
+  <div class="project-box">
+    <h3>Plots for Sale</h3>
+    <div class="slider" id="slider3">
+      <img src="https://via.placeholder.com/400x200/f08080/fff?text=Plot+1" onclick="openModal(this.src)">
+      <img src="https://via.placeholder.com/400x200/20b2aa/fff?text=Plot+2" onclick="openModal(this.src)">
+      <img src="https://via.placeholder.com/400x200/d2b48c/fff?text=Plot+3" onclick="openModal(this.src)">
     </div>
-  </section>
+  </div>
+</section>
 
-  <footer>
-    &copy;2025 Meridian<sup class="reg">®</sup> Arch Studio<br>
-    All rights reserved.
-  </footer>
+<!-- Modal for image popup -->
+<div class="modal" id="imageModal" onclick="closeModal()">
+  <span class="close-btn" onclick="closeModal()">×</span>
+  <img id="modalImg" src="">
+</div>
 
-  <script>
-    const slideIndexes = {
-      slider1: 0,
-      slider2: 0,
-      slider3: 0
-    };
+<footer>
+  &copy; 2025 Meridian<sup class="reg">®️</sup> Arch Studio. All rights reserved.
+</footer>
 
-    function autoSlide(sliderId) {
-      const slider = document.getElementById(sliderId);
-      const images = slider.querySelectorAll('img');
-      slideIndexes[sliderId] = (slideIndexes[sliderId] + 1) % images.length;
-      slider.style.transform = `translateX(-${slideIndexes[sliderId] * 100}%)`;
-    }
+<script>
+  function autoSlide(id) {
+    const slider = document.getElementById(id);
+    let index = 0;
+    const images = slider.querySelectorAll('img');
+    setInterval(() => {
+      index = (index + 1) % images.length;
+      slider.style.transform = `translateX(-${index * 100}%)`;
+    }, 2000);
+  }
 
-    setInterval(() => autoSlide('slider1'), 2000);
-    setInterval(() => autoSlide('slider2'), 2000);
-    setInterval(() => autoSlide('slider3'), 2000);
-  </script>
+  ['slider1', 'slider2', 'slider3'].forEach(autoSlide);
+
+  function openModal(src) {
+    const modal = document.getElementById('imageModal');
+    const modalImg = document.getElementById('modalImg');
+    modalImg.src = src;
+    modal.style.display = 'flex';
+  }
+
+  function closeModal() {
+    document.getElementById('imageModal').style.display = 'none';
+  }
+</script>
 
 </body>
 </html>
