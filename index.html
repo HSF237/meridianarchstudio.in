@@ -140,16 +140,26 @@
       .hero h2 { font-size: 24px; }
       header h1 { font-size: 18px; }
     }
+    .about-btn {
+  background: #ffcc00;
+  color: #000;
+  border: none;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.about-btn:hover {
+  background: #e6b800;
+}
   </style>
 </head>
 <body>
 
 <header>
   <h1>Meridian<sup class="reg">®️</sup> Arch Studio</h1>
-  <nav>
-    <a href="#projects">Projects</a>
-    <a href="https://hsf237.github.io/Meridianarchstudio/index.html">About Us</a>
-  </nav>
+  <button class="about-btn" onclick="location.href='https://hsf237.github.io/Meridianarchstudio.com/index.html'">About Us</button>
 </header>
 
 <section id="projects" class="projects">
@@ -287,6 +297,12 @@
   function closeModal() {
     document.getElementById('imageModal').style.display = 'none';
   }
+  function scrollToAbout() {
+  const aboutSection = document.getElementById('about-us');
+  if (aboutSection) {
+    aboutSection.scrollIntoView({ behavior: 'smooth' });
+  }
+}
 </script>
 
 </body>
