@@ -1,77 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Meridian Arch Studio</title>
   <style>
+    * {
+      box-sizing: border-box;
+    }
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
-      scroll-behavior: smooth;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #ffffff;
+      color: #333;
+      overflow: hidden;
     }
-
     header {
-      background: #f3f3f3;
-      padding: 60px 20px;
+      height: 20vh;
+      background: #eaeaea;
+      padding: 20px;
       text-align: center;
       position: relative;
     }
-
     header h1 {
       margin: 0;
-      font-size: 2em;
+      font-size: 1.5em;
     }
-
+    sup.reg {
+      font-size: 0.5em;
+      vertical-align: top;
+      margin-left: 2px;
+    }
     header p {
-      margin-top: 10px;
-      color: #555;
+      margin: 5px 0 0;
+      color: #666;
+      font-size: 0.9em;
     }
-
     .about-button {
       position: absolute;
-      top: 20px;
+      top: 15px;
       right: 20px;
-      background: yellow;
-      padding: 10px;
+      background: #ffeb3b;
+      padding: 6px 10px;
       border-radius: 5px;
       text-decoration: none;
-      color: black;
-      font-weight: bold;
+      color: #000;
+      font-weight: 600;
+      font-size: 0.85em;
     }
 
     .section {
-      padding: 40px 20px;
+      height: 25vh;
+      padding: 10px;
       text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
 
     .slider-container {
       position: relative;
       width: 90%;
-      max-width: 700px;
-      margin: 20px auto;
+      max-width: 600px;
+      margin: 10px auto 0;
       overflow: hidden;
       border-radius: 10px;
+      height: 100px;
     }
 
     .slider {
       display: flex;
       transition: transform 0.5s ease;
+      height: 100px;
     }
 
     .slider img {
       width: 100%;
       flex-shrink: 0;
+      object-fit: cover;
     }
 
     .slider-button {
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      background: rgba(255, 255, 255, 0.7);
+      background: rgba(255, 255, 255, 0.8);
       border: none;
-      padding: 10px;
-      font-size: 18px;
+      padding: 5px;
+      font-size: 16px;
       cursor: pointer;
     }
 
@@ -84,64 +100,56 @@
     }
 
     footer {
+      height: 10vh;
       text-align: center;
-      padding: 20px;
+      padding: 10px;
+      font-size: 12px;
       background: #f1f1f1;
-      font-size: 14px;
+      line-height: 1.5em;
     }
-    sup.reg {
-  font-size: 0.5em;
-  vertical-align: top;
-  margin-left: 2px;
-}
   </style>
 </head>
 <body>
 
-<header>
-  <h1>Meridian<sup class="reg">®</sup> Arch Studio</h1>
-  <p>since 2006</p>
-  <a href="https://hsf237.github.io/Meridianarchstudio/index.html" class="about-button">About Us</a>
-</header>
+  <header>
+    <h1>Meridian<sup class="reg">®</sup> Arch Studio</h1>
+    <p>since 2006</p>
+    <a href="https://hsf237.github.io/Meridianarchstudio/index.html" class="about-button" target="_blank">About Us</a>
+  </header>
 
-  <section class="section" id="ongoing">
+  <section class="section">
     <h2>Ongoing Projects</h2>
     <div class="slider-container">
       <div class="slider" id="slider1">
-        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" alt="Ongoing 1">
-        <img src="https://via.placeholder.com/700x400/999999/ffffff?text=Ongoing+2" alt="Ongoing 2">
+        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" alt="Ongoing 1" />
+        <img src="https://via.placeholder.com/700x400/999999/ffffff?text=Ongoing+2" alt="Ongoing 2" />
       </div>
-      <button class="slider-button prev" onclick="moveSlide('slider1', -1)">‹</button>
-      <button class="slider-button next" onclick="moveSlide('slider1', 1)">›</button>
     </div>
   </section>
 
-  <section class="section" id="villa">
+  <section class="section">
     <h2>Villa Projects</h2>
     <div class="slider-container">
       <div class="slider" id="slider2">
-        <img src="https://via.placeholder.com/700x400/aabbcc/000000?text=Villa+1" alt="Villa 1">
-        <img src="https://via.placeholder.com/700x400/778899/ffffff?text=Villa+2" alt="Villa 2">
+        <img src="https://via.placeholder.com/700x400/aabbcc/000000?text=Villa+1" alt="Villa 1" />
+        <img src="https://via.placeholder.com/700x400/778899/ffffff?text=Villa+2" alt="Villa 2" />
       </div>
-      <button class="slider-button prev" onclick="moveSlide('slider2', -1)">‹</button>
-      <button class="slider-button next" onclick="moveSlide('slider2', 1)">›</button>
     </div>
   </section>
 
-  <section class="section" id="plot">
+  <section class="section">
     <h2>Plot for Sale</h2>
     <div class="slider-container">
       <div class="slider" id="slider3">
-        <img src="https://via.placeholder.com/700x400/ccaa99/000000?text=Plot+1" alt="Plot 1">
-        <img src="https://via.placeholder.com/700x400/aa8877/ffffff?text=Plot+2" alt="Plot 2">
+        <img src="https://via.placeholder.com/700x400/ccaa99/000000?text=Plot+1" alt="Plot 1" />
+        <img src="https://via.placeholder.com/700x400/aa8877/ffffff?text=Plot+2" alt="Plot 2" />
       </div>
-      <button class="slider-button prev" onclick="moveSlide('slider3', -1)">‹</button>
-      <button class="slider-button next" onclick="moveSlide('slider3', 1)">›</button>
     </div>
   </section>
 
   <footer>
-    &copy;2025 Meridian® Arch Studio All rights Reserved.
+    &copy;2025 Meridian<sup class="reg">®</sup> Arch Studio<br>
+    All rights reserved.
   </footer>
 
   <script>
@@ -151,12 +159,16 @@
       slider3: 0
     };
 
-    function moveSlide(sliderId, direction) {
+    function autoSlide(sliderId) {
       const slider = document.getElementById(sliderId);
       const images = slider.querySelectorAll('img');
-      slideIndexes[sliderId] = (slideIndexes[sliderId] + direction + images.length) % images.length;
+      slideIndexes[sliderId] = (slideIndexes[sliderId] + 1) % images.length;
       slider.style.transform = `translateX(-${slideIndexes[sliderId] * 100}%)`;
     }
+
+    setInterval(() => autoSlide('slider1'), 2000);
+    setInterval(() => autoSlide('slider2'), 2000);
+    setInterval(() => autoSlide('slider3'), 2000);
   </script>
 
 </body>
