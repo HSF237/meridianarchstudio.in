@@ -13,7 +13,56 @@
       color: #222;
       background: #fafafa;
       scroll-behavior: smooth;
+      overflow-x: hidden;
     }
+    
+    /* Loading Animation */
+    .loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #1f1f1f;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 10000;
+      transition: opacity 0.5s, visibility 0.5s;
+    }
+    .loader.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+    .loader-circle {
+      width: 50px;
+      height: 50px;
+      border: 5px solid rgba(255, 255, 255, 0.3);
+      border-top-color: #ffcc00;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    /* Animated Background */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, rgba(255,204,0,0.05) 0%, rgba(31,31,31,0.05) 100%);
+      z-index: -1;
+      animation: bgShift 15s ease infinite;
+    }
+    @keyframes bgShift {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+    
     header {
       background: #1f1f1f;
       color: #fff;
@@ -25,25 +74,62 @@
       position: sticky;
       top: 0;
       z-index: 999;
+      animation: slideDown 0.8s ease-out;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
     }
+    @keyframes slideDown {
+      from { transform: translateY(-100%); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    
     header h1 {
       font-size: 20px;
+      position: relative;
+      animation: pulse 2s infinite;
     }
+    @keyframes pulse {
+      0% { text-shadow: 0 0 5px rgba(255,204,0,0.5); }
+      50% { text-shadow: 0 0 20px rgba(255,204,0,0.8); }
+      100% { text-shadow: 0 0 5px rgba(255,204,0,0.5); }
+    }
+    
     sup.reg {
       font-size: 0.5em;
       vertical-align: top;
       margin-left: 2px;
+      animation: rotate 3s linear infinite;
+      display: inline-block;
     }
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    
     nav a {
       color: #fff;
       text-decoration: none;
       margin-left: 15px;
       font-size: 15px;
+      position: relative;
+      transition: color 0.3s;
+    }
+    nav a::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: #ffcc00;
+      transition: width 0.3s;
     }
     nav a:hover {
       color: #ffcc00;
     }
-
+    nav a:hover::after {
+      width: 100%;
+    }
+    
     .hero {
       height: 250px;
       background: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c') center/cover no-repeat;
@@ -51,21 +137,49 @@
       justify-content: center;
       align-items: center;
       position: relative;
+      overflow: hidden;
     }
     .hero::before {
       content: '';
       position: absolute;
       inset: 0;
       background: rgba(0,0,0,0.5);
+      z-index: 1;
+    }
+    .hero-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 110%;
+      height: 110%;
+      background: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c') center/cover no-repeat;
+      will-change: transform;
+      animation: zoom 20s infinite alternate;
+    }
+    @keyframes zoom {
+      from { transform: scale(1); }
+      to { transform: scale(1.1); }
     }
     .hero h2 {
       color: #fff;
       font-size: 36px;
-      z-index: 1;
+      z-index: 2;
       text-align: center;
       padding: 0 20px;
+      animation: fadeInUp 1.5s ease-out;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
     }
-
+    @keyframes fadeInUp {
+      from { 
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to { 
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
     .projects {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -74,35 +188,101 @@
       max-width: 1200px;
       margin: auto;
     }
-
+    
     .project-box {
       background: #fff;
       border-radius: 10px;
       overflow: hidden;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
       position: relative;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeInUp 0.8s ease-out forwards;
+      transition: transform 0.3s, box-shadow 0.3s;
     }
-
+    .project-box:nth-child(1) { animation-delay: 0.2s; }
+    .project-box:nth-child(2) { animation-delay: 0.4s; }
+    .project-box:nth-child(3) { animation-delay: 0.6s; }
+    
+    .project-box:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+    }
+    
     .project-box h3 {
       padding: 10px;
       background: #1f1f1f;
       color: #fff;
       font-size: 16px;
+      position: relative;
+      overflow: hidden;
     }
-
+    .project-box h3::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, #ffcc00, #ff9900);
+      transform: translateX(-100%);
+      transition: transform 0.5s;
+    }
+    .project-box:hover h3::after {
+      transform: translateX(0);
+    }
+    
+    .slider-container {
+      position: relative;
+      overflow: hidden;
+    }
+    
     .slider {
       display: flex;
       transition: transform 0.5s ease-in-out;
     }
-
+    
     .slider img {
       width: 100%;
       height: 250px;
       object-fit: cover;
       flex-shrink: 0;
       cursor: pointer;
+      transition: transform 0.3s;
     }
-
+    .slider img:hover {
+      transform: scale(1.05);
+    }
+    
+    /* Slider Navigation Dots */
+    .slider-dots {
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 8px;
+      z-index: 2;
+    }
+    
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.5);
+      cursor: pointer;
+      transition: background 0.3s, transform 0.3s;
+    }
+    
+    .dot.active {
+      background: #ffcc00;
+      transform: scale(1.2);
+    }
+    
+    .dot:hover {
+      background: #ffcc00;
+    }
+    
     /* Modal */
     .modal {
       display: none;
@@ -115,11 +295,26 @@
       background: rgba(0,0,0,0.9);
       justify-content: center;
       align-items: center;
+      opacity: 0;
+      transition: opacity 0.3s;
     }
+    
+    .modal.show {
+      opacity: 1;
+    }
+    
     .modal img {
       max-width: 90%;
       max-height: 80vh;
+      transform: scale(0.8);
+      transition: transform 0.3s;
+      box-shadow: 0 5px 25px rgba(0,0,0,0.5);
     }
+    
+    .modal.show img {
+      transform: scale(1);
+    }
+    
     .close-btn {
       position: absolute;
       top: 20px;
@@ -127,208 +322,403 @@
       font-size: 28px;
       color: white;
       cursor: pointer;
+      transition: transform 0.3s, color 0.3s;
     }
-
+    
+    .close-btn:hover {
+      color: #ffcc00;
+      transform: rotate(90deg);
+    }
+    
+    .modal-nav {
+      position: absolute;
+      top: 50%;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      padding: 0 20px;
+      transform: translateY(-50%);
+    }
+    
+    .modal-nav-btn {
+      background: rgba(255,255,255,0.2);
+      color: white;
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      font-size: 20px;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .modal-nav-btn:hover {
+      background: rgba(255,204,0,0.7);
+      transform: scale(1.1);
+    }
+    
     footer {
       background: #1f1f1f;
       color: white;
       text-align: center;
       padding: 20px;
+      opacity: 0;
+      animation: fadeIn 1s ease-out 0.8s forwards;
     }
-
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    footer:hover {
+      background: #2a2a2a;
+      transition: background 0.5s;
+    }
+    
     @media(max-width: 768px) {
       .hero h2 { font-size: 24px; }
       header h1 { font-size: 18px; }
     }
+    
     .about-btn {
-  background: #ffcc00;
-  color: #000;
-  border: none;
-  padding: 10px 16px;
-  font-size: 14px;
-  font-weight: bold;
-  border-radius: 5px;
-  cursor: pointer;
-}
-.about-btn:hover {
-  background: #e6b800;
-}
-.social-icons {
-  position: fixed;
-  bottom: 20px;
-  left: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  z-index: 1000;
-}
-
-.social-icons img {
-  width: 24px;
-  height: 24px;
-  filter: drop-shadow(0 0 2px rgba(0,0,0,0.4));
-  transition: transform 0.2s;
-}
-
-.social-icons a:hover img {
-  transform: scale(1.1);
-}
+      background: #ffcc00;
+      color: #000;
+      border: none;
+      padding: 10px 16px;
+      font-size: 14px;
+      font-weight: bold;
+      border-radius: 5px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.3s;
+    }
+    
+    .about-btn::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.5);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+    
+    .about-btn:hover::before {
+      width: 300px;
+      height: 300px;
+    }
+    
+    .about-btn:hover {
+      background: #e6b800;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+    
+    .social-icons {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 1000;
+    }
+    
+    .social-icons a {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background: rgba(31,31,31,0.7);
+      border-radius: 50%;
+      transition: transform 0.3s, background 0.3s;
+      animation: float 3s ease-in-out infinite;
+    }
+    
+    .social-icons a:nth-child(1) { animation-delay: 0s; }
+    .social-icons a:nth-child(2) { animation-delay: 0.2s; }
+    .social-icons a:nth-child(3) { animation-delay: 0.4s; }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    .social-icons a:hover {
+      transform: scale(1.1) translateY(-5px);
+      background: #ffcc00;
+    }
+    
+    .social-icons img {
+      width: 24px;
+      height: 24px;
+      filter: drop-shadow(0 0 2px rgba(0,0,0,0.4));
+      transition: transform 0.2s;
+    }
+    
+    .social-icons a:hover img {
+      transform: scale(1.2);
+    }
+    
+    /* Tooltip */
+    .social-icons a::after {
+      content: attr(title);
+      position: absolute;
+      left: 50px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(31,31,31,0.9);
+      color: white;
+      padding: 5px 10px;
+      border-radius: 5px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s, transform 0.3s;
+    }
+    
+    .social-icons a:hover::after {
+      opacity: 1;
+      transform: translateY(-50%) translateX(5px);
+    }
+    
+    /* Scroll animations */
+    .scroll-reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s, transform 0.8s;
+    }
+    
+    .scroll-reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    /* Animated particles */
+    .particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    }
+    
+    .particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: rgba(255,204,0,0.5);
+      border-radius: 50%;
+      animation: float-up 15s linear infinite;
+    }
+    
+    @keyframes float-up {
+      0% {
+        transform: translateY(100vh) translateX(0);
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+      }
+      90% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-100vh) translateX(100px);
+        opacity: 0;
+      }
+    }
   </style>
 </head>
 <body>
+<!-- Loading Animation -->
+<div class="loader" id="loader">
+  <div class="loader-circle"></div>
+</div>
+
+<!-- Animated Particles -->
+<div class="particles" id="particles"></div>
 
 <header>
   <h1>Meridian<sup class="reg">®️</sup> Arch Studio</h1>
   <button class="about-btn" onclick="location.href='https://hsf237.github.io/Meridianarchstudio.com/index.html'">About Us</button>
 </header>
 
+<section class="hero">
+  <div class="hero-bg"></div>
+  <h2>Architectural Excellence</h2>
+</section>
+
 <section id="projects" class="projects">
-  <div class="project-box">
+  <div class="project-box scroll-reveal">
     <h3>Ongoing Projects</h3>
-    <div class="slider" id="slider1">
-      <img src="FB_IMG_1576859897790.jpg" onclick="openModal(this.src)">
-      <img src="IMG-20191220-WA0016.jpg" onclick="openModal(this.src)">
-      <img src="IMG-20191220-WA0017.jpg" onclick="openModal(this.src)">
-      <img src="IMG-20191220-WA0018.jpg" onclick="openModal(this.src)">
-      <img src="IMG-20191220-WA0019.jpg" onclick="openModal(this.src)">
-      <img src="IMG-20191220-WA0020.jpg" onclick="openModal(this.src)">
-      <img src="IMG-20191220-WA0021.jpg" onclick="openModal(this.src)">
-      <img src="IMG-20191220-WA0022.jpg" onclick="openModal(this.src)">
-      <img src="IMG-20191220-WA0023.jpg" onclick="openModal(this.src)">
-      <img src="IMG-20191220-WA0024.jpg" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_5d7c572ddb9843ccb96060a7fc1396b0~mv2.jpg" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_880288fd79744c26b64363bd4f8bde44~mv2.jpeg" onclick="openModal(this.src)">
-      <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_5d7c572ddb9843ccb96060a7fc1396b0~mv2.jpg" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_880288fd79744c26b64363bd4f8bde44~mv2.jpeg" onclick="openModal(this.src)">
-      <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_5d7c572ddb9843ccb96060a7fc1396b0~mv2.jpg" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_880288fd79744c26b64363bd4f8bde44~mv2.jpeg" onclick="openModal(this.src)"> 
-      <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_5d7c572ddb9843ccb96060a7fc1396b0~mv2.jpg" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_880288fd79744c26b64363bd4f8bde44~mv2.jpeg" onclick="openModal(this.src)">
-      <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_5d7c572ddb9843ccb96060a7fc1396b0~mv2.jpg" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_880288fd79744c26b64363bd4f8bde44~mv2.jpeg" onclick="openModal(this.src)">
-      <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_5d7c572ddb9843ccb96060a7fc1396b0~mv2.jpg" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_880288fd79744c26b64363bd4f8bde44~mv2.jpeg" onclick="openModal(this.src)">
-      <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_5d7c572ddb9843ccb96060a7fc1396b0~mv2.jpg" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_880288fd79744c26b64363bd4f8bde44~mv2.jpeg" onclick="openModal(this.src)">
-      <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_5d7c572ddb9843ccb96060a7fc1396b0~mv2.jpg" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_880288fd79744c26b64363bd4f8bde44~mv2.jpeg" onclick="openModal(this.src)">
-      <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_5d7c572ddb9843ccb96060a7fc1396b0~mv2.jpg" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_880288fd79744c26b64363bd4f8bde44~mv2.jpeg" onclick="openModal(this.src)">
-      <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_5d7c572ddb9843ccb96060a7fc1396b0~mv2.jpg" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_880288fd79744c26b64363bd4f8bde44~mv2.jpeg" onclick="openModal(this.src)">
-      <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_5d7c572ddb9843ccb96060a7fc1396b0~mv2.jpg" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_880288fd79744c26b64363bd4f8bde44~mv2.jpeg" onclick="openModal(this.src)">
-      <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_5d7c572ddb9843ccb96060a7fc1396b0~mv2.jpg" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_880288fd79744c26b64363bd4f8bde44~mv2.jpeg" onclick="openModal(this.src)">
-      <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_5d7c572ddb9843ccb96060a7fc1396b0~mv2.jpg" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_880288fd79744c26b64363bd4f8bde44~mv2.jpeg" onclick="openModal(this.src)">
-      <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_5d7c572ddb9843ccb96060a7fc1396b0~mv2.jpg" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_880288fd79744c26b64363bd4f8bde44~mv2.jpeg" onclick="openModal(this.src)">
-      <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_5d7c572ddb9843ccb96060a7fc1396b0~mv2.jpg" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_880288fd79744c26b64363bd4f8bde44~mv2.jpeg" onclick="openModal(this.src)"> 
-      <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_5d7c572ddb9843ccb96060a7fc1396b0~mv2.jpg" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_880288fd79744c26b64363bd4f8bde44~mv2.jpeg" onclick="openModal(this.src)">
-      <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_5d7c572ddb9843ccb96060a7fc1396b0~mv2.jpg" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_880288fd79744c26b64363bd4f8bde44~mv2.jpeg" onclick="openModal(this.src)">
-      <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_5d7c572ddb9843ccb96060a7fc1396b0~mv2.jpg" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_880288fd79744c26b64363bd4f8bde44~mv2.jpeg" onclick="openModal(this.src)">
-      <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_5d7c572ddb9843ccb96060a7fc1396b0~mv2.jpg" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_880288fd79744c26b64363bd4f8bde44~mv2.jpeg" onclick="openModal(this.src)">
-      <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_5d7c572ddb9843ccb96060a7fc1396b0~mv2.jpg" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_880288fd79744c26b64363bd4f8bde44~mv2.jpeg" onclick="openModal(this.src)">
-      <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_5d7c572ddb9843ccb96060a7fc1396b0~mv2.jpg" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_880288fd79744c26b64363bd4f8bde44~mv2.jpeg" onclick="openModal(this.src)">
-      <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_5d7c572ddb9843ccb96060a7fc1396b0~mv2.jpg" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_880288fd79744c26b64363bd4f8bde44~mv2.jpeg" onclick="openModal(this.src)">
-      <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_5d7c572ddb9843ccb96060a7fc1396b0~mv2.jpg" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_880288fd79744c26b64363bd4f8bde44~mv2.jpeg" onclick="openModal(this.src)">
-      <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_5d7c572ddb9843ccb96060a7fc1396b0~mv2.jpg" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_880288fd79744c26b64363bd4f8bde44~mv2.jpeg" onclick="openModal(this.src)">
-      <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_5d7c572ddb9843ccb96060a7fc1396b0~mv2.jpg" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_880288fd79744c26b64363bd4f8bde44~mv2.jpeg" onclick="openModal(this.src)">
-      <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_5d7c572ddb9843ccb96060a7fc1396b0~mv2.jpg" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_880288fd79744c26b64363bd4f8bde44~mv2.jpeg" onclick="openModal(this.src)">
-      <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_5d7c572ddb9843ccb96060a7fc1396b0~mv2.jpg" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_880288fd79744c26b64363bd4f8bde44~mv2.jpeg" onclick="openModal(this.src)"> 
-      <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_5d7c572ddb9843ccb96060a7fc1396b0~mv2.jpg" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_880288fd79744c26b64363bd4f8bde44~mv2.jpeg" onclick="openModal(this.src)">
-      <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_5d7c572ddb9843ccb96060a7fc1396b0~mv2.jpg" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_880288fd79744c26b64363bd4f8bde44~mv2.jpeg" onclick="openModal(this.src)">
-      <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_5d7c572ddb9843ccb96060a7fc1396b0~mv2.jpg" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_880288fd79744c26b64363bd4f8bde44~mv2.jpeg" onclick="openModal(this.src)">
-      <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_5d7c572ddb9843ccb96060a7fc1396b0~mv2.jpg" onclick="openModal(this.src)">
-     </div>
-  </div>
-  <div class="project-box">
-    <h3>Villa Projects</h3>
-    <div class="slider" id="slider2">
-      <img src="https://static.wixstatic.com/media/4040b7_6b07061fef194432a3ad35648ab3950b~mv2.jpg" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_a182131f48064dc696b00962012ccd6d~mv2.jpg" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_e97747aef854440eb720a5aff81bd206~mv2.jpg" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_6b07061fef194432a3ad35648ab3950b~mv2.jpg" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_a182131f48064dc696b00962012ccd6d~mv2.jpg" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_e97747aef854440eb720a5aff81bd206~mv2.jpg" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_6b07061fef194432a3ad35648ab3950b~mv2.jpg" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_a182131f48064dc696b00962012ccd6d~mv2.jpg" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_e97747aef854440eb720a5aff81bd206~mv2.jpg" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_6b07061fef194432a3ad35648ab3950b~mv2.jpg" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_a182131f48064dc696b00962012ccd6d~mv2.jpg" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_e97747aef854440eb720a5aff81bd206~mv2.jpg" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_6b07061fef194432a3ad35648ab3950b~mv2.jpg" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_a182131f48064dc696b00962012ccd6d~mv2.jpg" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_e97747aef854440eb720a5aff81bd206~mv2.jpg" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_6b07061fef194432a3ad35648ab3950b~mv2.jpg" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_a182131f48064dc696b00962012ccd6d~mv2.jpg" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_e97747aef854440eb720a5aff81bd206~mv2.jpg" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_6b07061fef194432a3ad35648ab3950b~mv2.jpg" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_a182131f48064dc696b00962012ccd6d~mv2.jpg" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_e97747aef854440eb720a5aff81bd206~mv2.jpg" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_6b07061fef194432a3ad35648ab3950b~mv2.jpg" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_a182131f48064dc696b00962012ccd6d~mv2.jpg" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_e97747aef854440eb720a5aff81bd206~mv2.jpg" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_6b07061fef194432a3ad35648ab3950b~mv2.jpg" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_a182131f48064dc696b00962012ccd6d~mv2.jpg" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_e97747aef854440eb720a5aff81bd206~mv2.jpg" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_6b07061fef194432a3ad35648ab3950b~mv2.jpg" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_a182131f48064dc696b00962012ccd6d~mv2.jpg" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_e97747aef854440eb720a5aff81bd206~mv2.jpg" onclick="openModal(this.src)">
+    <div class="slider-container">
+      <div class="slider" id="slider1">
+        <img src="FB_IMG_1576859897790.jpg" onclick="openModal(this.src)">
+        <img src="IMG-20191220-WA0016.jpg" onclick="openModal(this.src)">
+        <img src="IMG-20191220-WA0017.jpg" onclick="openModal(this.src)">
+        <img src="IMG-20191220-WA0018.jpg" onclick="openModal(this.src)">
+        <img src="IMG-20191220-WA0019.jpg" onclick="openModal(this.src)">
+        <img src="IMG-20191220-WA0020.jpg" onclick="openModal(this.src)">
+        <img src="IMG-20191220-WA0021.jpg" onclick="openModal(this.src)">
+        <img src="IMG-20191220-WA0022.jpg" onclick="openModal(this.src)">
+        <img src="IMG-20191220-WA0023.jpg" onclick="openModal(this.src)">
+        <img src="IMG-20191220-WA0024.jpg" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_5d7c572ddb9843ccb96060a7fc1396b0~mv2.jpg" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_880288fd79744c26b64363bd4f8bde44~mv2.jpeg" onclick="openModal(this.src)">
+        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_5d7c572ddb9843ccb96060a7fc1396b0~mv2.jpg" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_880288fd79744c26b64363bd4f8bde44~mv2.jpeg" onclick="openModal(this.src)">
+        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_5d7c572ddb9843ccb96060a7fc1396b0~mv2.jpg" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_880288fd79744c26b64363bd4f8bde44~mv2.jpeg" onclick="openModal(this.src)"> 
+        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_5d7c572ddb9843ccb96060a7fc1396b0~mv2.jpg" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_880288fd79744c26b64363bd4f8bde44~mv2.jpeg" onclick="openModal(this.src)">
+        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_5d7c572ddb9843ccb96060a7fc1396b0~mv2.jpg" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_880288fd79744c26b64363bd4f8bde44~mv2.jpeg" onclick="openModal(this.src)">
+        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_5d7c572ddb9843ccb96060a7fc1396b0~mv2.jpg" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_880288fd79744c26b64363bd4f8bde44~mv2.jpeg" onclick="openModal(this.src)">
+        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_5d7c572ddb9843ccb96060a7fc1396b0~mv2.jpg" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_880288fd79744c26b64363bd4f8bde44~mv2.jpeg" onclick="openModal(this.src)">
+        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_5d7c572ddb9843ccb96060a7fc1396b0~mv2.jpg" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_880288fd79744c26b64363bd4f8bde44~mv2.jpeg" onclick="openModal(this.src)">
+        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_5d7c572ddb9843ccb96060a7fc1396b0~mv2.jpg" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_880288fd79744c26b64363bd4f8bde44~mv2.jpeg" onclick="openModal(this.src)">
+        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_5d7c572ddb9843ccb96060a7fc1396b0~mv2.jpg" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_880288fd79744c26b64363bd4f8bde44~mv2.jpeg" onclick="openModal(this.src)">
+        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_5d7c572ddb9843ccb96060a7fc1396b0~mv2.jpg" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_880288fd79744c26b64363bd4f8bde44~mv2.jpeg" onclick="openModal(this.src)">
+        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_5d7c572ddb9843ccb96060a7fc1396b0~mv2.jpg" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_880288fd79744c26b64363bd4f8bde44~mv2.jpeg" onclick="openModal(this.src)">
+        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_5d7c572ddb9843ccb96060a7fc1396b0~mv2.jpg" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_880288fd79744c26b64363bd4f8bde44~mv2.jpeg" onclick="openModal(this.src)">
+        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_5d7c572ddb9843ccb96060a7fc1396b0~mv2.jpg" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_880288fd79744c26b64363bd4f8bde44~mv2.jpeg" onclick="openModal(this.src)">
+        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_5d7c572ddb9843ccb96060a7fc1396b0~mv2.jpg" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_880288fd79744c26b64363bd4f8bde44~mv2.jpeg" onclick="openModal(this.src)"> 
+        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_5d7c572ddb9843ccb96060a7fc1396b0~mv2.jpg" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_880288fd79744c26b64363bd4f8bde44~mv2.jpeg" onclick="openModal(this.src)">
+        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_5d7c572ddb9843ccb96060a7fc1396b0~mv2.jpg" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_880288fd79744c26b64363bd4f8bde44~mv2.jpeg" onclick="openModal(this.src)">
+        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_5d7c572ddb9843ccb96060a7fc1396b0~mv2.jpg" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_880288fd79744c26b64363bd4f8bde44~mv2.jpeg" onclick="openModal(this.src)">
+        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_5d7c572ddb9843ccb96060a7fc1396b0~mv2.jpg" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_880288fd79744c26b64363bd4f8bde44~mv2.jpeg" onclick="openModal(this.src)">
+        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_5d7c572ddb9843ccb96060a7fc1396b0~mv2.jpg" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_880288fd79744c26b64363bd4f8bde44~mv2.jpeg" onclick="openModal(this.src)">
+        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_5d7c572ddb9843ccb96060a7fc1396b0~mv2.jpg" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_880288fd79744c26b64363bd4f8bde44~mv2.jpeg" onclick="openModal(this.src)">
+        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_5d7c572ddb9843ccb96060a7fc1396b0~mv2.jpg" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_880288fd79744c26b64363bd4f8bde44~mv2.jpeg" onclick="openModal(this.src)">
+        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_5d7c572ddb9843ccb96060a7fc1396b0~mv2.jpg" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_880288fd79744c26b64363bd4f8bde44~mv2.jpeg" onclick="openModal(this.src)">
+        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_5d7c572ddb9843ccb96060a7fc1396b0~mv2.jpg" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_880288fd79744c26b64363bd4f8bde44~mv2.jpeg" onclick="openModal(this.src)">
+        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_5d7c572ddb9843ccb96060a7fc1396b0~mv2.jpg" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_880288fd79744c26b64363bd4f8bde44~mv2.jpeg" onclick="openModal(this.src)">
+        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_5d7c572ddb9843ccb96060a7fc1396b0~mv2.jpg" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_880288fd79744c26b64363bd4f8bde44~mv2.jpeg" onclick="openModal(this.src)">
+        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_5d7c572ddb9843ccb96060a7fc1396b0~mv2.jpg" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_880288fd79744c26b64363bd4f8bde44~mv2.jpeg" onclick="openModal(this.src)"> 
+        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_5d7c572ddb9843ccb96060a7fc1396b0~mv2.jpg" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_880288fd79744c26b64363bd4f8bde44~mv2.jpeg" onclick="openModal(this.src)">
+        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_5d7c572ddb9843ccb96060a7fc1396b0~mv2.jpg" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_880288fd79744c26b64363bd4f8bde44~mv2.jpeg" onclick="openModal(this.src)">
+        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_5d7c572ddb9843ccb96060a7fc1396b0~mv2.jpg" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_880288fd79744c26b64363bd4f8bde44~mv2.jpeg" onclick="openModal(this.src)">
+        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_5d7c572ddb9843ccb96060a7fc1396b0~mv2.jpg" onclick="openModal(this.src)">
+       </div>
+      <div class="slider-dots" id="dots1"></div>
     </div>
   </div>
-  <div class="project-box">
+  
+  <div class="project-box scroll-reveal">
+    <h3>Villa Projects</h3>
+    <div class="slider-container">
+      <div class="slider" id="slider2">
+        <img src="https://static.wixstatic.com/media/4040b7_6b07061fef194432a3ad35648ab3950b~mv2.jpg" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_a182131f48064dc696b00962012ccd6d~mv2.jpg" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_e97747aef854440eb720a5aff81bd206~mv2.jpg" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_6b07061fef194432a3ad35648ab3950b~mv2.jpg" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_a182131f48064dc696b00962012ccd6d~mv2.jpg" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_e97747aef854440eb720a5aff81bd206~mv2.jpg" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_6b07061fef194432a3ad35648ab3950b~mv2.jpg" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_a182131f48064dc696b00962012ccd6d~mv2.jpg" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_e97747aef854440eb720a5aff81bd206~mv2.jpg" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_6b07061fef194432a3ad35648ab3950b~mv2.jpg" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_a182131f48064dc696b00962012ccd6d~mv2.jpg" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_e97747aef854440eb720a5aff81bd206~mv2.jpg" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_6b07061fef194432a3ad35648ab3950b~mv2.jpg" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_a182131f48064dc696b00962012ccd6d~mv2.jpg" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_e97747aef854440eb720a5aff81bd206~mv2.jpg" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_6b07061fef194432a3ad35648ab3950b~mv2.jpg" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_a182131f48064dc696b00962012ccd6d~mv2.jpg" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_e97747aef854440eb720a5aff81bd206~mv2.jpg" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_6b07061fef194432a3ad35648ab3950b~mv2.jpg" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_a182131f48064dc696b00962012ccd6d~mv2.jpg" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_e97747aef854440eb720a5aff81bd206~mv2.jpg" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_6b07061fef194432a3ad35648ab3950b~mv2.jpg" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_a182131f48064dc696b00962012ccd6d~mv2.jpg" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_e97747aef854440eb720a5aff81bd206~mv2.jpg" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_6b07061fef194432a3ad35648ab3950b~mv2.jpg" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_a182131f48064dc696b00962012ccd6d~mv2.jpg" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_e97747aef854440eb720a5aff81bd206~mv2.jpg" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_6b07061fef194432a3ad35648ab3950b~mv2.jpg" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_a182131f48064dc696b00962012ccd6d~mv2.jpg" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_e97747aef854440eb720a5aff81bd206~mv2.jpg" onclick="openModal(this.src)">
+      </div>
+      <div class="slider-dots" id="dots2"></div>
+    </div>
+  </div>
+  
+  <div class="project-box scroll-reveal">
     <h3>Plots for Sale</h3>
-    <div class="slider" id="slider3">
-      <img src="aboobackermuthiyalam.pdf" onclick="openModal(this.src)">
-      <img src="https://static.wixstatic.com/media/4040b7_27ce70edcca7409c97974c5623ccbd3f~mv2.jpg" onclick="openModal(this.src)">
+    <div class="slider-container">
+      <div class="slider" id="slider3">
+        <img src="aboobackermuthiyalam.pdf" onclick="openModal(this.src)">
+        <img src="https://static.wixstatic.com/media/4040b7_27ce70edcca7409c97974c5623ccbd3f~mv2.jpg" onclick="openModal(this.src)">
+      </div>
+      <div class="slider-dots" id="dots3"></div>
     </div>
   </div>
 </section>
@@ -336,6 +726,10 @@
 <!-- Modal for image popup -->
 <div class="modal" id="imageModal" onclick="closeModal()">
   <span class="close-btn" onclick="closeModal()">×</span>
+  <div class="modal-nav">
+    <button class="modal-nav-btn" onclick="changeImage(-1)">❮</button>
+    <button class="modal-nav-btn" onclick="changeImage(1)">❯</button>
+  </div>
   <img id="modalImg" src="">
 </div>
 
@@ -356,35 +750,188 @@
 </footer>
 
 <script>
-  function autoSlide(id) {
-    const slider = document.getElementById(id);
-    let index = 0;
-    const images = slider.querySelectorAll('img');
-    setInterval(() => {
-      index = (index + 1) % images.length;
-      slider.style.transform = `translateX(-${index * 100}%)`;
-    }, 2000);
+  // Hide loader when page is loaded
+  window.addEventListener('load', function() {
+    setTimeout(() => {
+      document.getElementById('loader').classList.add('hidden');
+    }, 500);
+  });
+  
+  // Create floating particles
+  function createParticles() {
+    const particlesContainer = document.getElementById('particles');
+    const particleCount = 30;
+    
+    for (let i = 0; i < particleCount; i++) {
+      const particle = document.createElement('div');
+      particle.classList.add('particle');
+      
+      // Random position and animation delay
+      const left = Math.random() * 100;
+      const delay = Math.random() * 15;
+      const duration = 15 + Math.random() * 15;
+      
+      particle.style.left = `${left}%`;
+      particle.style.animationDelay = `${delay}s`;
+      particle.style.animationDuration = `${duration}s`;
+      
+      particlesContainer.appendChild(particle);
+    }
   }
-
-  ['slider1', 'slider2', 'slider3'].forEach(autoSlide);
-
+  
+  createParticles();
+  
+  // Slider functionality
+  function autoSlide(id, dotsId) {
+    const slider = document.getElementById(id);
+    const dotsContainer = document.getElementById(dotsId);
+    const images = slider.querySelectorAll('img');
+    let index = 0;
+    let interval;
+    
+    // Create dots
+    images.forEach((_, i) => {
+      const dot = document.createElement('span');
+      dot.classList.add('dot');
+      if (i === 0) dot.classList.add('active');
+      dot.addEventListener('click', () => {
+        index = i;
+        updateSlider();
+      });
+      dotsContainer.appendChild(dot);
+    });
+    
+    const dots = dotsContainer.querySelectorAll('.dot');
+    
+    function updateSlider() {
+      slider.style.transform = `translateX(-${index * 100}%)`;
+      
+      // Update dots
+      dots.forEach((dot, i) => {
+        if (i === index) {
+          dot.classList.add('active');
+        } else {
+          dot.classList.remove('active');
+        }
+      });
+    }
+    
+    function nextSlide() {
+      index = (index + 1) % images.length;
+      updateSlider();
+    }
+    
+    // Start auto sliding
+    interval = setInterval(nextSlide, 3000);
+    
+    // Pause on hover
+    slider.addEventListener('mouseenter', () => clearInterval(interval));
+    slider.addEventListener('mouseleave', () => {
+      interval = setInterval(nextSlide, 3000);
+    });
+    
+    // Touch support for mobile
+    let touchStartX = 0;
+    let touchEndX = 0;
+    
+    slider.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    });
+    
+    slider.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      handleSwipe();
+    });
+    
+    function handleSwipe() {
+      if (touchEndX < touchStartX - 50) nextSlide();
+      if (touchEndX > touchStartX + 50) {
+        index = (index - 1 + images.length) % images.length;
+        updateSlider();
+      }
+    }
+  }
+  
+  // Initialize sliders
+  autoSlide('slider1', 'dots1');
+  autoSlide('slider2', 'dots2');
+  autoSlide('slider3', 'dots3');
+  
+  // Modal functionality
+  let currentImageIndex = 0;
+  let currentSliderImages = [];
+  
   function openModal(src) {
     const modal = document.getElementById('imageModal');
     const modalImg = document.getElementById('modalImg');
+    
+    // Find which slider the image belongs to
+    const sliders = ['slider1', 'slider2', 'slider3'];
+    for (const sliderId of sliders) {
+      const slider = document.getElementById(sliderId);
+      const images = Array.from(slider.querySelectorAll('img'));
+      const index = images.findIndex(img => img.src === src);
+      
+      if (index !== -1) {
+        currentSliderImages = images.map(img => img.src);
+        currentImageIndex = index;
+        break;
+      }
+    }
+    
     modalImg.src = src;
     modal.style.display = 'flex';
+    setTimeout(() => modal.classList.add('show'), 10);
   }
-
+  
   function closeModal() {
-    document.getElementById('imageModal').style.display = 'none';
+    const modal = document.getElementById('imageModal');
+    modal.classList.remove('show');
+    setTimeout(() => modal.style.display = 'none', 300);
   }
+  
+  function changeImage(direction) {
+    event.stopPropagation();
+    
+    if (currentSliderImages.length === 0) return;
+    
+    currentImageIndex = (currentImageIndex + direction + currentSliderImages.length) % currentSliderImages.length;
+    document.getElementById('modalImg').src = currentSliderImages[currentImageIndex];
+  }
+  
+  // Scroll reveal animation
+  function revealOnScroll() {
+    const reveals = document.querySelectorAll('.scroll-reveal');
+    
+    for (let i = 0; i < reveals.length; i++) {
+      const windowHeight = window.innerHeight;
+      const elementTop = reveals[i].getBoundingClientRect().top;
+      const elementVisible = 100;
+      
+      if (elementTop < windowHeight - elementVisible) {
+        reveals[i].classList.add('active');
+      }
+    }
+  }
+  
+  window.addEventListener('scroll', revealOnScroll);
+  revealOnScroll(); // Initial check
+  
+  // Parallax effect for hero background
+  window.addEventListener('scroll', () => {
+    const scrolled = window.pageYOffset;
+    const heroBg = document.querySelector('.hero-bg');
+    if (heroBg) {
+      heroBg.style.transform = `scale(1.1) translateY(${scrolled * 0.5}px)`;
+    }
+  });
+  
   function scrollToAbout() {
-  const aboutSection = document.getElementById('about-us');
-  if (aboutSection) {
-    aboutSection.scrollIntoView({ behavior: 'smooth' });
+    const aboutSection = document.getElementById('about-us');
+    if (aboutSection) {
+      aboutSection.scrollIntoView({ behavior: 'smooth' });
+    }
   }
-}
 </script>
-
 </body>
 </html>
